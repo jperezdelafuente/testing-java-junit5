@@ -56,6 +56,7 @@ class IndexControllerTest implements ControllerTests {
     }
 
     @Test
+    @Disabled("Demo of env variable")
     void testAssumptionTrue() {
         assumeTrue("GURU".equalsIgnoreCase(System.getenv("GURU_RUNTIME")));
     }
