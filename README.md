@@ -8,4 +8,8 @@ This source code repository contains JUnit 5 test examples with Maven and Gradle
 ## Setup
 ### Requirements
 * Should use Java 11 or higher. Previous versions of Java are un-tested.
-* Use Maven 3.5.2 or higher or use Gradle 4.10.2 or higher
+* Use Maven 3.5.2
+  * mvnw clean test (for unitary test)
+  * mvnw clean verify (for unitary and integration test)
+* Use Gradle 4.10.2 or higher
+  * gradlew clean test (for unitary and integration test)
