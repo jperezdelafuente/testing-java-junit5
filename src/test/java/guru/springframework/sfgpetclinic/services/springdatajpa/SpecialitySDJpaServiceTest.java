@@ -40,7 +40,7 @@ class SpecialitySDJpaServiceTest {
 
         // then - verify the output
         assertThat(foundSpecialty).isSameAs(speciality);
-        verify(specialtyRepository).findById(1L);
+        then(specialtyRepository).should(timeout(100)).findById(1L);
     }
 
     @DisplayName("Test find by id with bdd mockito style")
@@ -55,7 +55,7 @@ class SpecialitySDJpaServiceTest {
 
         // then - verify the output
         assertThat(foundSpecialty).isNotNull();
-        then(specialtyRepository).should().findById(anyLong());
+        then(specialtyRepository).should(timeout(100)).findById(anyLong());
         then(specialtyRepository).shouldHaveNoMoreInteractions();
     }
 
@@ -69,7 +69,7 @@ class SpecialitySDJpaServiceTest {
         service.delete(speciality);
 
         // then - verify the output
-        then(specialtyRepository).should().delete(any(Speciality.class));
+        then(specialtyRepository).should(timeout(100)).delete(any(Speciality.class));
     }
 
 
@@ -92,7 +92,7 @@ class SpecialitySDJpaServiceTest {
         service.deleteById(1l);
 
         // then - verify the output
-        then(specialtyRepository).should(atLeastOnce()).deleteById(1L);
+        then(specialtyRepository).should(timeout(100).atLeastOnce()).deleteById(1L);
     }
 
     @DisplayName("Test delete by id at most with bdd mockito style")
@@ -125,7 +125,7 @@ class SpecialitySDJpaServiceTest {
         service.delete(new Speciality());
 
         // then - verify the output
-        then(specialtyRepository).should().delete(any());
+        then(specialtyRepository).should(timeout(100)).delete(any());
     }
 
     @DisplayName("Test delete with exception, without bdd mockito style")
@@ -133,7 +133,7 @@ class SpecialitySDJpaServiceTest {
     void testDoThrow() {
         doThrow(new RuntimeException("boom")).when(specialtyRepository).delete(any());
         assertThrows(RuntimeException.class, () -> service.delete(new Speciality()));
-        verify(specialtyRepository).delete(any());
+        then(specialtyRepository).should(timeout(100)).delete(any());
     }
 
     @DisplayName("Test delete with exception, with bdd mockito style")
@@ -141,7 +141,7 @@ class SpecialitySDJpaServiceTest {
     void testDeleteBDD() {
         willThrow(new RuntimeException("boom")).given(specialtyRepository).delete(any());
         assertThrows(RuntimeException.class, () -> service.delete(new Speciality()));
-        then(specialtyRepository).should().delete(any());
+        then(specialtyRepository).should(timeout(100)).delete(any());
     }
 
     @DisplayName("Test find by id with exception, with bdd mockito style")
@@ -149,7 +149,7 @@ class SpecialitySDJpaServiceTest {
     void testFindByIDThrows() {
         given(specialtyRepository.findById(1L)).willThrow(new RuntimeException("boom"));
         assertThrows(RuntimeException.class, () -> service.findById(1L));
-        then(specialtyRepository).should().findById(1L);
+        then(specialtyRepository).should(timeout(100)).findById(1L);
     }
 
 
@@ -172,7 +172,7 @@ class SpecialitySDJpaServiceTest {
 
         //then
         assertThat(returnedSpecialty.getId()).isEqualTo(1L);
-        then(specialtyRepository).should().save(any());
+        then(specialtyRepository).should(timeout(100)).save(any());
     }
 
 
@@ -196,6 +196,6 @@ class SpecialitySDJpaServiceTest {
 
         //then
         assertNull(returnedSpecialty);
-        then(specialtyRepository).should().save(any());
+        then(specialtyRepository).should(timeout(100)).save(any());
     }
 }
