@@ -12,9 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SpecialitySDJpaServiceTest {
@@ -124,5 +123,29 @@ class SpecialitySDJpaServiceTest {
 
         // then - verify the output
         then(specialtyRepository).should().delete(any());
+    }
+
+    @DisplayName("Test delete with exception, without bdd mockito style")
+    @Test
+    void testDoThrow() {
+        doThrow(new RuntimeException("boom")).when(specialtyRepository).delete(any());
+        assertThrows(RuntimeException.class, () -> service.delete(new Speciality()));
+        verify(specialtyRepository).delete(any());
+    }
+
+    @DisplayName("Test delete with exception, with bdd mockito style")
+    @Test
+    void testDeleteBDD() {
+        willThrow(new RuntimeException("boom")).given(specialtyRepository).delete(any());
+        assertThrows(RuntimeException.class, () -> service.delete(new Speciality()));
+        then(specialtyRepository).should().delete(any());
+    }
+
+    @DisplayName("Test find by id with exception, with bdd mockito style")
+    @Test
+    void testFindByIDThrows() {
+        given(specialtyRepository.findById(1L)).willThrow(new RuntimeException("boom"));
+        assertThrows(RuntimeException.class, () -> service.findById(1L));
+        then(specialtyRepository).should().findById(1L);
     }
 }
