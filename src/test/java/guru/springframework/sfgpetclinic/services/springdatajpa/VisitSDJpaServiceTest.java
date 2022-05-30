@@ -16,7 +16,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,7 +44,7 @@ class VisitSDJpaServiceTest {
         Set<Visit> foundVisits = service.findAll();
 
         // then - verify the output
-        verify(visitRepository).findAll();
+        then(visitRepository).should().findAll();
         assertThat(foundVisits).hasSize(2);
         assertThat(foundVisits).isEqualTo(visits);
     }
@@ -60,7 +60,7 @@ class VisitSDJpaServiceTest {
         Visit foundVisit = service.findById(1L);
 
         // then - verify the output
-        verify(visitRepository).findById(anyLong());
+        then(visitRepository).should().findById(anyLong());
         assertThat(foundVisit).isNotNull();
     }
 
@@ -75,7 +75,7 @@ class VisitSDJpaServiceTest {
         Visit savedVisit = service.save(new Visit());
 
         // then - verify the output
-        verify(visitRepository).save(any(Visit.class));
+        then(visitRepository).should().save(any(Visit.class));
         assertThat(savedVisit).isNotNull();
     }
 
@@ -89,7 +89,7 @@ class VisitSDJpaServiceTest {
         service.delete(visit);
 
         // then - verify the output
-        verify(visitRepository).delete(any(Visit.class));
+        then(visitRepository).should().delete(any(Visit.class));
     }
 
     @DisplayName("Test delete by id")
@@ -99,6 +99,6 @@ class VisitSDJpaServiceTest {
         service.deleteById(1L);
 
         // then - verify the output
-        verify(visitRepository).deleteById(anyLong());
+        then(visitRepository).should().deleteById(anyLong());
     }
 }

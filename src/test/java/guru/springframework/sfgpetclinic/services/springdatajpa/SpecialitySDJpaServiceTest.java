@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,6 +25,8 @@ class SpecialitySDJpaServiceTest {
     @InjectMocks
     SpecialitySDJpaService service;
 
+
+    @DisplayName("Test find by id without bdd mockito style")
     @Test
     void findByIdTest() {
         // given - precondition/setup
@@ -38,7 +41,7 @@ class SpecialitySDJpaServiceTest {
         verify(specialtyRepository).findById(1L);
     }
 
-    @DisplayName("Test find by id with bdd")
+    @DisplayName("Test find by id with bdd mockito style")
     @Test
     void findByIdBddTest() {
         // given - precondition/setup
@@ -50,9 +53,11 @@ class SpecialitySDJpaServiceTest {
 
         // then - verify the output
         assertThat(foundSpecialty).isNotNull();
-        verify(specialtyRepository).findById(anyLong());
+        then(specialtyRepository).should().findById(anyLong());
+        then(specialtyRepository).shouldHaveNoMoreInteractions();
     }
 
+    @DisplayName("Test delete by object with bdd mockito style")
     @Test
     void testDeleteByObject() {
         // given - precondition/setup
@@ -62,44 +67,62 @@ class SpecialitySDJpaServiceTest {
         service.delete(speciality);
 
         // then - verify the output
-        verify(specialtyRepository).delete(any(Speciality.class));
+        then(specialtyRepository).should().delete(any(Speciality.class));
     }
 
+
+    @DisplayName("Test delete by id with bdd mockito style")
     @Test
     void deleteById() {
+        // when - action or the behaviour that we are going to test
         service.deleteById(1l);
         service.deleteById(1l);
 
-        verify(specialtyRepository, times(2)).deleteById(1l);
+        // then - verify the output
+        then(specialtyRepository).should(times(2)).deleteById(1L);
     }
 
+    @DisplayName("Test delete by id at least with bdd mockito style")
     @Test
     void deleteByIdAtLeast() {
+        // when - action or the behaviour that we are going to test
         service.deleteById(1l);
         service.deleteById(1l);
 
-        verify(specialtyRepository, atLeastOnce()).deleteById(1l);
+        // then - verify the output
+        then(specialtyRepository).should(atLeastOnce()).deleteById(1L);
     }
 
+    @DisplayName("Test delete by id at most with bdd mockito style")
     @Test
     void deleteByIdAtMost() {
+        // when - action or the behaviour that we are going to test
         service.deleteById(1l);
         service.deleteById(1l);
 
-        verify(specialtyRepository, atMost(5)).deleteById(1l);
+        // then - verify the output
+        then(specialtyRepository).should(atMost(5)).deleteById(1L);
     }
 
+    @DisplayName("Test delete by id never with bdd mockito style")
     @Test
     void deleteByIdNever() {
+        // when - action or the behaviour that we are going to test
         service.deleteById(1l);
         service.deleteById(1l);
 
-        verify(specialtyRepository, atLeastOnce()).deleteById(1l);
-        verify(specialtyRepository, never()).deleteById(5L);
+        // then - verify the output
+        then(specialtyRepository).should(atLeastOnce()).deleteById(1L);
+        then(specialtyRepository).should(never()).deleteById(5L);
     }
 
+    @DisplayName("Test delete by with bdd mockito style")
     @Test
     void testDelete() {
+        // when - action or the behaviour that we are going to test
         service.delete(new Speciality());
+
+        // then - verify the output
+        then(specialtyRepository).should().delete(any());
     }
 }
