@@ -37,6 +37,18 @@ class SpecialitySDJpaServiceTest {
     }
 
     @Test
+    void testDeleteByObject() {
+        // given - precondition/setup
+        Speciality speciality = new Speciality();
+
+        // when - action or the behaviour that we are going to test
+        service.delete(speciality);
+
+        // then - verify the output
+        verify(specialtyRepository).delete(any(Speciality.class));
+    }
+
+    @Test
     void deleteById() {
         service.deleteById(1l);
         service.deleteById(1l);
